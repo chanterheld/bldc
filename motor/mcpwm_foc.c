@@ -3330,7 +3330,15 @@ void mcpwm_foc_adc_int_handler(void *p, uint32_t flags) {
 			case FOC_SENSOR_MODE_HFI_START:
 				motor_now->m_motor_state.phase = motor_now->m_phase_now_observer;
 
-				if (motor_now->m_phase_observer_override) {
+                //boost currents at low rpm to overcome cogging torque
+                if (fabsf(motor_now->m_pll_speed) < RPM2RADPS_f(conf_now->foc_openloop_rpm)) {
+                    iq_set_tmp += conf_now->foc_sl_openloop_boost_q * SIGN(iq_set_tmp);
+                    if (conf_now->foc_sl_openloop_max_q > conf_now->cc_min_current) {
+                        utils_truncate_number_abs(&iq_set_tmp, conf_now->foc_sl_openloop_max_q);
+                    }
+                }
+
+                if (motor_now->m_phase_observer_override) {
 					motor_now->m_hfi.est_done_cnt = 0;
 					motor_now->m_hfi.flip_cnt = 0;
 
@@ -3789,10 +3797,12 @@ static void timer_update(motor_all_state_t *motor, float dt) {
 		utils_truncate_number(&openloop_current, 0.0, conf_now->foc_sl_openloop_max_q);
 	}
 
-	float openloop_rpm_max = utils_map(openloop_current,
-			0.0, conf_now->l_current_max,
-			conf_now->foc_openloop_rpm_low * conf_now->foc_openloop_rpm,
-			conf_now->foc_openloop_rpm);
+    //ramp to full open loop rpm independent of current
+    float openloop_rpm_max = conf_now->foc_openloop_rpm;
+//	float openloop_rpm_max = utils_map(openloop_current,
+//			0.0, conf_now->l_current_max,
+//			conf_now->foc_openloop_rpm_low * conf_now->foc_openloop_rpm,
+//			conf_now->foc_openloop_rpm);
 
 	utils_truncate_number_abs(&openloop_rpm_max, conf_now->foc_openloop_rpm);
 
