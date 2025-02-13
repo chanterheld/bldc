@@ -31,12 +31,12 @@
 #define LED_GREEN_GPIO			GPIOB
 #define LED_GREEN_PIN			0
 #define LED_RED_GPIO			GPIOB
-#define LED_RED_PIN			1
+#define LED_RED_PIN			    1
 
-#define LED_GREEN_ON()			palSetPad(LED_GREEN_GPIO, LED_GREEN_PIN)
-#define LED_GREEN_OFF()		palClearPad(LED_GREEN_GPIO, LED_GREEN_PIN)
-#define LED_RED_ON()			palSetPad(LED_RED_GPIO, LED_RED_PIN)
-#define LED_RED_OFF()			palClearPad(LED_RED_GPIO, LED_RED_PIN)
+#define LED_GREEN_ON()			palClearPad(LED_GREEN_GPIO, LED_GREEN_PIN)
+#define LED_GREEN_OFF()		    palSetPad(LED_GREEN_GPIO, LED_GREEN_PIN)
+#define LED_RED_ON()			palClearPad(LED_RED_GPIO, LED_RED_PIN)
+#define LED_RED_OFF()			palSetPad(LED_RED_GPIO, LED_RED_PIN)
 
 #define PHASE_FILTER_GPIO		GPIOC
 #define PHASE_FILTER_PIN		13
@@ -135,7 +135,7 @@
 
 // NTC Termistors
 //#define NTC_RES(adc_val)		((4095.0 * 10000.0) / adc_val - 10000.0)
-#define NTC_TEMP(adc_ind)		(ADC_VOLTS(adc_ind)*100.0 - 40.0)
+#define NTC_TEMP(adc_ind)		(ADC_VOLTS(adc_ind)*100.0 - 50.0)
 
 #define NTC_RES_MOTOR(adc_val)		(10000.0 / ((4095.0 / (float)adc_val) - 1.0))
 #define NTC_TEMP_MOTOR(beta)		(1.0 / ((logf(NTC_RES_MOTOR(ADC_Value[ADC_IND_TEMP_MOTOR]) / 10000.0) / beta) + (1.0 / 298.15)) - 273.15)
