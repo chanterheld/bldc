@@ -89,24 +89,27 @@
  * 17 (3):  IN3		SENS3
  */
 
-#define HW_ADC_CHANNELS		18
-#define HW_ADC_INJ_CHANNELS		3
-#define HW_ADC_NBR_CONV		6
+#define HW_ADC_CHANNELS		    9
+#define HW_ADC_INJ_CHANNELS	    3
+#define HW_ADC_NBR_CONV		    3
 
 // ADC Indexes
-#define ADC_IND_SENS1			3
-#define ADC_IND_SENS2			4
-#define ADC_IND_SENS3			5
+// critical
 #define ADC_IND_CURR1			0
 #define ADC_IND_CURR2			1
 #define ADC_IND_CURR3			2
-#define ADC_IND_VIN_SENS		11
-#define ADC_IND_EXT			6
-#define ADC_IND_EXT2			7
-#define ADC_IND_SHUTDOWN		10
+#define ADC_IND_SENS1			3
+#define ADC_IND_SENS2			4
+#define ADC_IND_SENS3			5
+
+//optinal
+#define ADC_IND_VREFINT		    6
+#define ADC_IND_VIN_SENS		7
 #define ADC_IND_TEMP_MOS		8
-#define ADC_IND_TEMP_MOTOR		9
-#define ADC_IND_VREFINT		12
+
+//fake channels
+#define ADC_IND_EXT		        ADC_IND_VREFINT
+#define ADC_IND_TEMP_MOTOR      ADC_IND_TEMP_MOS
 
 // ADC macros and settings
 
