@@ -81,14 +81,14 @@ static THD_FUNCTION(my_thread, arg) {
 	is_running = true;
 
 
-for(;;) {
+    for(;;) {
 		// Check if it is time to stop.
 		if (stop_now) {
 			is_running = false;
 			return;
 		}
 
-		timeout_reset(); // Reset timeout if everything is OK.
+//		timeout_reset(); // Reset timeout if everything is OK.
 
 		// Run your logic here. A lot of functionality is available in mc_interface.h.
         mc_fault_code fault = mc_interface_get_fault();  //29 faults -> 5 bit min
@@ -101,11 +101,12 @@ for(;;) {
         uint8_t msg_data[8];
         int32_t index = 0;
 
-        msg_data[index++] = fault;
         buffer_append_float16(msg_data, motor_current, 200.0, &index);
         buffer_append_float16(msg_data, rpm / 10.0, 1, &index);
+        buffer_append_uint16(msg_data, (uint16_t)(amp_hours * 200.0), &index); //bc unsigned float
         msg_data[index++] = (uint8_t)(temp_mosfet + 51.0);
-        buffer_append_int16(msg_data, (uint16_t)(amp_hours * 200.0), &index); //bc unsigned float
+        msg_data[index++] = fault;
+
 
         comm_can_transmit_sid(controller_id | (((uint16_t)3 && 0x0007) << 8), msg_data, 8);
 
