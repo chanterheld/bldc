@@ -254,6 +254,14 @@
 
 #define FOC_CONTROL_LOOP_FREQ_DIVIDER 1
 
+//app config
+#define APP_CUSTOM_TO_USE           "app_lobster.c"
+#define APPCONF_APP_TO_USE			APP_CUSTOM
+#define APPCONF_SHUTDOWN_MODE		SHUTDOWN_MODE_ALWAYS_ON
+//TODO add app and motor defaults
+
+
+
 // Functions
 bool hw_sample_shutdown_button(void);
 
