@@ -96,7 +96,7 @@ static THD_FUNCTION(my_thread, arg) {
         float rpm = mcpwm_foc_get_rpm(); //+-300k => 600k @ 100rpm range => 13 bits min
         float temp_mosfet = mc_interface_temp_fet_filtered(); //-50 +150 => 200degr @ 1deg => 8 bit
         float amp_hours = mc_interface_get_amp_hours(false); // 0 to 100 @ .1 => 1000 => 10 bits
-        uint8_t controller_id = app_get_configuration()->controller_id;
+        uint32_t controller_id = app_get_configuration()->controller_id;
 
         uint8_t msg_data[8];
         int32_t index = 0;
@@ -108,7 +108,7 @@ static THD_FUNCTION(my_thread, arg) {
         msg_data[index++] = fault;
 
 
-        comm_can_transmit_sid(controller_id | (((uint16_t)3 && 0x0007) << 8), msg_data, 8);
+        comm_can_transmit_sid(controller_id | 0x0300, msg_data, 8);
 
 		chThdSleepMilliseconds(5); //200 hz
 	}
