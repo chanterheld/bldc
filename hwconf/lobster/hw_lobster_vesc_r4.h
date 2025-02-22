@@ -243,21 +243,29 @@
 #endif
 
 // Setting limits
-#define HW_LIM_CURRENT			-50.0, 50.0
+#define HW_LIM_CURRENT			-65.0, 65.0
 #define HW_LIM_CURRENT_IN		-40.0, 40.0
-#define HW_LIM_CURRENT_ABS		0.0, 70.0
-#define HW_LIM_VIN			30.0, 80.0
-#define HW_LIM_ERPM			-200e3, 200e3
-#define HW_LIM_DUTY_MIN		0.0, 0.1
-#define HW_LIM_DUTY_MAX		0.0, 0.99
-#define HW_LIM_TEMP_FET		-40.0, 110.0
+#define HW_LIM_CURRENT_ABS		0.0, 80.0
+#define HW_LIM_VIN			    30.0, 80.0
+#define HW_LIM_ERPM			    -200e3, 200e3
+#define HW_LIM_DUTY_MIN		    0.0, 0.1
+#define HW_LIM_DUTY_MAX		    0.0, 0.99
+#define HW_LIM_TEMP_FET		    -40.0, 110.0
 
 #define FOC_CONTROL_LOOP_FREQ_DIVIDER 1
 
+
+//mc config
+#define MCCONF_M_FAULT_STOP_TIME		    100	// Ignore commands for this duration in msec when faults occur
+
 //app config
-#define APP_CUSTOM_TO_USE           "app_lobster.c"
-#define APPCONF_APP_TO_USE			APP_CUSTOM
-#define APPCONF_SHUTDOWN_MODE		SHUTDOWN_MODE_ALWAYS_ON
+#define APP_CUSTOM_TO_USE                   "app_lobster.c"
+#define APPCONF_APP_TO_USE			        APP_CUSTOM
+#define APPCONF_SHUTDOWN_MODE		        SHUTDOWN_MODE_ALWAYS_ON
+#define APPCONF_CAN_MODE			        CAN_MODE_VESC
+#define APPCONF_PERMANENT_UART_ENABLED		false
+#define APPCONF_TIMEOUT_MSEC				50
+
 //TODO add app and motor defaults
 
 
