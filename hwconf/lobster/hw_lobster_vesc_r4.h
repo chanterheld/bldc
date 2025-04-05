@@ -26,6 +26,7 @@
 #define HW_HAS_3_SHUNTS
 #define HW_HAS_PHASE_SHUNTS
 #define HW_HAS_PHASE_FILTERS
+#define HW_USE_25MHZ_EXT_CLOCK
 
 // Macros
 #define LED_GREEN_GPIO			GPIOB
@@ -121,10 +122,10 @@
 #define VIN_R2				2000.0
 #endif
 #ifndef CURRENT_AMP_GAIN
-#define CURRENT_AMP_GAIN		20.0
+#define CURRENT_AMP_GAIN		1.0
 #endif
 #ifndef CURRENT_SHUNT_RES
-#define CURRENT_SHUNT_RES		0.0005
+#define CURRENT_SHUNT_RES		0.0264
 #endif
 
 // Input voltage
@@ -243,9 +244,9 @@
 #endif
 
 // Setting limits
-#define HW_LIM_CURRENT			-65.0, 65.0
+#define HW_LIM_CURRENT			-50.0, 50.0
 #define HW_LIM_CURRENT_IN		-40.0, 40.0
-#define HW_LIM_CURRENT_ABS		0.0, 80.0
+#define HW_LIM_CURRENT_ABS		0.0, 60.0
 #define HW_LIM_VIN			    30.0, 80.0
 #define HW_LIM_ERPM			    -200e3, 200e3
 #define HW_LIM_DUTY_MIN		    0.0, 0.1
