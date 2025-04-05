@@ -189,7 +189,7 @@ static void timer_reinit(int f_zv) {
 
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_CenterAligned1;
-	TIM_TimeBaseStructure.TIM_Period = (SYSTEM_CORE_CLOCK / f_zv);
+	TIM_TimeBaseStructure.TIM_Period = (SYSTEM_CORE_CLOCK / HW_LOBSTER_F_ZV);
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 
@@ -265,7 +265,7 @@ static void timer_reinit(int f_zv) {
 
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Period = 0xFFFF;
+	TIM_TimeBaseStructure.TIM_Period = (SYSTEM_CORE_CLOCK / f_zv);
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -301,10 +301,10 @@ static void timer_reinit(int f_zv) {
 	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR1);
 	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
 #else
-	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
-	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
-	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR0);
-	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
+//	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
+//	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
+//	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR0);
+//	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
 #endif
 
 #ifdef HW_HAS_DUAL_MOTORS

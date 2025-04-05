@@ -27,6 +27,7 @@
 #define HW_HAS_PHASE_SHUNTS
 #define HW_HAS_PHASE_FILTERS
 #define HW_USE_25MHZ_EXT_CLOCK
+#define HW_LOBSTER_F_ZV        (1600000)
 
 // Macros
 #define LED_GREEN_GPIO			GPIOB
