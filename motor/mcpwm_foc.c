@@ -47,6 +47,8 @@ static volatile bool m_dccal_done = false;
 static volatile float m_last_adc_isr_duration;
 static volatile bool m_init_done = false;
 static volatile motor_all_state_t m_motor_1;
+static volatile bool static_is_v7 = false;
+
 #ifdef HW_HAS_DUAL_MOTORS
 static volatile motor_all_state_t m_motor_2;
 #endif
@@ -301,6 +303,7 @@ static void timer_reinit(int f_zv) {
 	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR1);
 	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
 #else
+    //Removed: connection of timer 1 update to timer 2 reset
 //	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
 //	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
 //	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR0);
@@ -315,6 +318,7 @@ static void timer_reinit(int f_zv) {
 	TIM1->CNT = 0;
 	TIM_Cmd(TIM1, ENABLE);
 	TIM_Cmd(TIM2, ENABLE);
+    static_is_v7 = false;
 
 	// Prevent all low side FETs from switching on
 	stop_pwm_hw((motor_all_state_t*)&m_motor_1);
@@ -2815,7 +2819,9 @@ void mcpwm_foc_adc_int_handler(void *p, uint32_t flags) {
 
 	uint32_t t_start = timer_time_now();
 
-	bool is_v7 = !(TIM1->CR1 & TIM_CR1_DIR);
+    bool is_v7 = static_is_v7;
+    static_is_v7 = !static_is_v7;
+
 	bool is_second_motor = false;
 	int norm_curr_ofs = 0;
 
