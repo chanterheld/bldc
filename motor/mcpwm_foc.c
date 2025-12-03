@@ -49,6 +49,9 @@ static volatile bool m_init_done = false;
 static volatile motor_all_state_t m_motor_1;
 static volatile bool static_is_v7 = false;
 
+extern volatile uint8_t t1_interrupt_cnt;
+extern volatile uint8_t t1_downscale_factor;
+
 #ifdef HW_HAS_DUAL_MOTORS
 static volatile motor_all_state_t m_motor_2;
 #endif
@@ -267,7 +270,7 @@ static void timer_reinit(int f_zv) {
 
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Period = (SYSTEM_CORE_CLOCK / f_zv);
+	TIM_TimeBaseStructure.TIM_Period = 0xFFFF;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -304,10 +307,10 @@ static void timer_reinit(int f_zv) {
 	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
 #else
     //Removed: connection of timer 1 update to timer 2 reset
-//	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
-//	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
-//	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR0);
-//	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
+	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
+	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
+	TIM_SelectInputTrigger(TIM2, TIM_TS_ITR0);
+	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
 #endif
 
 #ifdef HW_HAS_DUAL_MOTORS
@@ -316,9 +319,13 @@ static void timer_reinit(int f_zv) {
 	TIM8->CNT = 0;
 #endif
 	TIM1->CNT = 0;
+
+    static_is_v7 = false;
+    t1_interrupt_cnt = 0;
+    t1_downscale_factor = HW_LOBSTER_F_ZV/f_zv;
+
 	TIM_Cmd(TIM1, ENABLE);
 	TIM_Cmd(TIM2, ENABLE);
-    static_is_v7 = false;
 
 	// Prevent all low side FETs from switching on
 	stop_pwm_hw((motor_all_state_t*)&m_motor_1);
@@ -335,7 +342,7 @@ static void timer_reinit(int f_zv) {
 	TIM_ITConfig(TIM2, TIM_IT_CC2, ENABLE);
 	utils_sys_unlock_cnt();
 
-	nvicEnableVector(TIM2_IRQn, 6);
+	nvicEnableVector(TIM2_IRQn, 5);
 }
 
 static void init_audio_state(volatile mc_audio_state *s) {

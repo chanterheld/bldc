@@ -51,6 +51,9 @@ CH_IRQ_HANDLER(HW_ENC_TIM_ISR_VEC) {
 	}
 }
 
+volatile uint8_t t1_interrupt_cnt = 0;
+volatile uint8_t t1_downscale_factor = 1;
+
 CH_IRQ_HANDLER(TIM2_IRQHandler) {
 	if (TIM_GetITStatus(TIM2, TIM_IT_CC2) != RESET) {
 		mcpwm_foc_tim_sample_int_handler();
@@ -59,6 +62,14 @@ CH_IRQ_HANDLER(TIM2_IRQHandler) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
 	}
 	TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
+
+    t1_interrupt_cnt += 1;
+    if (t1_interrupt_cnt % t1_downscale_factor == 0) {
+        t1_interrupt_cnt = 0;
+        TIM_CtrlPWMOutputs(TIM2, ENABLE);
+    }else{
+        TIM_CtrlPWMOutputs(TIM2, DISABLE);
+    }
 }
 
 CH_IRQ_HANDLER(PVD_IRQHandler) {
