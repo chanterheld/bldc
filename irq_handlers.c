@@ -51,25 +51,15 @@ CH_IRQ_HANDLER(HW_ENC_TIM_ISR_VEC) {
 	}
 }
 
-volatile uint8_t t1_interrupt_cnt = 0;
-volatile uint8_t t1_downscale_factor = 1;
-
+// this interrupt is now triggered by update events, as is the ADC
 CH_IRQ_HANDLER(TIM2_IRQHandler) {
-	if (TIM_GetITStatus(TIM2, TIM_IT_CC2) != RESET) {
+	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
 		mcpwm_foc_tim_sample_int_handler();
 
 		// Clear the IT pending bit
-		TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
-	TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
-
-    t1_interrupt_cnt += 1;
-    if (t1_interrupt_cnt % t1_downscale_factor == 0) {
-        t1_interrupt_cnt = 0;
-        TIM_CtrlPWMOutputs(TIM2, ENABLE);
-    }else{
-        TIM_CtrlPWMOutputs(TIM2, DISABLE);
-    }
+	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 }
 
 CH_IRQ_HANDLER(PVD_IRQHandler) {

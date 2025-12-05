@@ -27,7 +27,7 @@
 #define HW_HAS_PHASE_SHUNTS
 #define HW_HAS_PHASE_FILTERS
 #define HW_USE_25MHZ_EXT_CLOCK
-#define HW_LOBSTER_F_ZV        (1600000)
+#define HW_LOBSTER_FVZ_UPSCALE_FACTOR (32)
 
 // Macros
 #define LED_GREEN_GPIO			GPIOB
@@ -216,7 +216,7 @@
 #define READ_HALL2()			palReadPad(HW_HALL_ENC_GPIO2, HW_HALL_ENC_PIN2)
 #define READ_HALL3()			palReadPad(HW_HALL_ENC_GPIO3, HW_HALL_ENC_PIN3)
 
-#define HW_DEAD_TIME_NSEC		500.0
+#define HW_DEAD_TIME_NSEC		80.0
 
 // Default setting overrides
 #ifndef MCCONF_L_MIN_VOLTAGE
