@@ -306,8 +306,8 @@ static void timer_reinit(int f_zv) {
 	TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_External1);
 
     // configure update events for trigger out ADC triggering
-    TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
-    TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
+    TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
+    TIM_SelectMasterSlaveMode(TIM2, TIM_MasterSlaveMode_Enable);
 #endif
 
 #ifdef HW_HAS_DUAL_MOTORS
